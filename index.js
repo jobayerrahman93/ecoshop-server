@@ -1,13 +1,16 @@
 const express = require ('express');
 const res = require('express/lib/response');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+var cors = require('cors');
 const app =express();
-const port = 5000;
+app.use(cors());
+const port = process.env.PORT || 5000;
+require('dotenv').config();
 
 
 // ecoshop
 // 3g55OEDu8wGbJgxJ
-const uri = "mongodb+srv://ecoshop:3g55OEDu8wGbJgxJ@cluster0.ipq6z.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ipq6z.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -25,7 +28,7 @@ async function run(){
             const ecoshop= client.db('echoShop');
             const allProductCollection = ecoshop.collection("allProducts");
             const allProduct = await allProductCollection.find({}).toArray();
-            console.log(allProduct);
+            // console.log(allProduct);
             res.send(allProduct)
 
         })
