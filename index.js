@@ -2,6 +2,7 @@ const express = require ('express');
 const app =express();
 var cors = require('cors');
 app.use(cors());
+app.use(express.json());
 const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
@@ -28,7 +29,41 @@ async function run(){
             // console.log(allProduct);
             res.send(allProduct)
 
+        });
+
+
+        // cart add in db
+
+        app.post('/', async(req,res)=>{
+            console.log('hitting fav');
+
+            const cartProducts = await req.body;
+            // console.log(value);
+
+            const database = client.db("echoShop");
+            const favProductCollection = database.collection("favProduct");
+            const result = await favProductCollection.insertOne(cartProducts);
+            res.json(result);
+
+            
+        });
+
+
+        app.get('/cart', async(req,res)=>{
+            // console.log('hitting cart');
+
+
+            const database = client.db("echoShop");
+            const cartCollection = database.collection("favProduct");
+            const result = await cartCollection.find({}).toArray();
+            res.send(result);
+
+            
         })
+
+
+
+
         
     }
     finally {
