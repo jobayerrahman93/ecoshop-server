@@ -21,7 +21,7 @@ async function run(){
         await client.connect();
      
         app.get("/", async(req,res)=>{
-            console.log("hitting database");
+            // console.log("hitting database");
 
             const ecoshop= client.db('echoShop');
             const allProductCollection =  ecoshop.collection("allProducts");
@@ -35,14 +35,14 @@ async function run(){
         // cart add in db
 
         app.post('/', async(req,res)=>{
-            console.log('hitting fav');
+            // console.log('hitting fav');
 
             const cartProducts = await req.body;
             // console.log(value);
 
             const database = client.db("echoShop");
-            const favProductCollection = database.collection("favProduct");
-            const result = await favProductCollection.insertOne(cartProducts);
+            const cartProductCollection = database.collection("cartProduct");
+            const result = await cartProductCollection.insertOne(cartProducts);
             res.json(result);
 
             
@@ -54,7 +54,7 @@ async function run(){
 
 
             const database = client.db("echoShop");
-            const cartCollection = database.collection("favProduct");
+            const cartCollection = database.collection("cartProduct");
             const result = await cartCollection.find({}).toArray();
             res.send(result);
 
